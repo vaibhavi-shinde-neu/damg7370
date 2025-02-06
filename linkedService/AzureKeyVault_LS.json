@@ -1,0 +1,12 @@
+{
+	"name": "AzureKeyVault_LS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "access my key from azure Data factory",
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://damg7370kvspring2025vs.vault.azure.net/"
+		}
+	}
+}
