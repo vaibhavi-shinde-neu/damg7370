@@ -5,7 +5,14 @@
 			{
 				"name": "Parquet_2_Snowflake",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Tsv_2_Parquet",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.00:30:00",
 					"retry": 1,
@@ -43,7 +50,13 @@
 				"inputs": [
 					{
 						"referenceName": "Parquet1",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"filename": {
+								"value": "@variables('myFileName')",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
@@ -51,8 +64,8 @@
 						"referenceName": "ds_snowflake",
 						"type": "DatasetReference",
 						"parameters": {
-							"TableName": "SEATTLE_PET_LIC_STG",
-							"SchemaName": "STAGE"
+							"TableName": "PET_LICENSE_STAGE",
+							"SchemaName": "DADABI_SCHEMA"
 						}
 					}
 				]
@@ -109,14 +122,20 @@
 				"outputs": [
 					{
 						"referenceName": "Parquet1",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"filename": {
+								"value": "@variables('myFileName')",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
 		],
-		"parameters": {
+		"variables": {
 			"myFileName": {
-				"type": "string"
+				"type": "String"
 			}
 		},
 		"annotations": []
