@@ -28,7 +28,7 @@
 							{
 								"name": "DI_JOB_ID",
 								"value": {
-									"value": "@pipeline().parameters.DI_JOB_ID",
+									"value": "@pipeline().RunId",
 									"type": "Expression"
 								}
 							},
