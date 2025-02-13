@@ -1,0 +1,16 @@
+{
+	"name": "SnowflakeTable2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake_LS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [],
+		"typeProperties": {
+			"schema": "DADABI_SCHEMA",
+			"table": "FCT_ARREST"
+		}
+	}
+}
