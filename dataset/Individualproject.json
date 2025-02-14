@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "DADABI_SCHEMA",
-			"table": "FCT_ARREST"
+			"table": "STG_ARREST"
 		}
 	}
 }
