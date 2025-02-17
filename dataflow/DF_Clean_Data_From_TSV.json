@@ -16,9 +16,15 @@
 			"transformations": [
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     Job_ID as string (\"10\")",
+				"}",
 				"source(output(",
 				"          License_Issue_Date as string,",
 				"          License_Number as string,",
@@ -31,12 +37,25 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> readTSVfile",
-				"readTSVfile derive(LIC_ISSUE_DATE = toDate({License_Issue_Date}, 'MMMM dd yyyy', 'en-US'),",
+				"readTSVfile derive(LIC_ISSUE_DATE = toDate(License_Issue_Date, 'MMMM dd yyyy', 'en-US'),",
 				"          Secondary_Breed = iifNull(Secondary_Breed, 'Unknown'),",
 				"          ZIP_Code = lpad(toString(ZIP_Code), 5, '0'),",
 				"          Species = upper(Species),",
 				"          License_Number = toInteger(translate(License_Number, 'S', '')),",
-				"          Animals_Name = translate(Animals_Name, '()[]', '')) ~> derivedColumn1"
+				"          Animals_Name = translate(Animals_Name, '()[]', ''),",
+				"          Load_Dt = currentDate(),",
+				"          column1 = ERROR_FUNCTION('')) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          LIC_ISSUE_DATE,",
+				"          License_Number,",
+				"          Animals_Name,",
+				"          Species,",
+				"          Primary_Breed,",
+				"          Secondary_Breed,",
+				"          ZIP_Code",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select1"
 			]
 		}
 	}
