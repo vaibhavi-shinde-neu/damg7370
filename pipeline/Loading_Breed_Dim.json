@@ -1,0 +1,35 @@
+{
+	"name": "Loading_Breed_Dim",
+	"properties": {
+		"activities": [
+			{
+				"name": "Load_Breed_Dim",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_Load_Breed_Dim",
+						"type": "DataFlowReference",
+						"parameters": {
+							"DI_JOB_ID": "\"DI_\" + upper(right(uuid(), 7))"
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
