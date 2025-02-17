@@ -26,10 +26,7 @@
 				},
 				"fileSystem": "bronze"
 			},
-			"columnDelimiter": {
-				"value": "@dataset().FileDelimiter",
-				"type": "Expression"
-			},
+			"columnDelimiter": "\t",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
