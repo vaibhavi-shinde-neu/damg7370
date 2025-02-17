@@ -21,7 +21,16 @@
 					"description": "Import data from \nds_Edw_Breed_Dim"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_Edw_Breed_Dim",
+						"type": "DatasetReference"
+					},
+					"name": "sinkBreedDim",
+					"description": "Export data to ds_Edw_Breed_Dim"
+				}
+			],
 			"transformations": [
 				{
 					"name": "SourceDataWithSK",
@@ -36,10 +45,13 @@
 					"description": "Adding new key RowNum starting from 1 with step 1"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "DerivedColumns"
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     DI_JOB_ID as string (\"10\")",
+				"}",
 				"source(output(",
 				"          LICENSE_ISSUE_DATE as string,",
 				"          LICENSE_NUMBER as string,",
@@ -74,7 +86,39 @@
 				"aggregateBreedKeys keyGenerate(output(RowNum as long),",
 				"     startAt: 1L,",
 				"     stepValue: 1L) ~> surrogateKey",
-				"surrogateKey derive() ~> derivedColumn1"
+				"surrogateKey derive(BREED_SK = MAXBREEDSK + RowNum,",
+				"          DI_CREATED_DT = toString(currentDate(), 'yyyy-MM-dd'),",
+				"          DI_JOB_ID = $DI_JOB_ID) ~> DerivedColumns",
+				"DerivedColumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          BREED_SK as string,",
+				"          START_DT as string,",
+				"          END_DT as string,",
+				"          IS_CURRENT as string,",
+				"          BREED_DK as string,",
+				"          SPECIES_NAME as string,",
+				"          PRIMARY_BREED_NAME as string,",
+				"          SECONDARY_BREED_NAME as string,",
+				"          DI_JOB_ID as string,",
+				"          DI_LOAD_DT as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          BREED_SK,",
+				"          PRIMARY_BREED_NAME = PRIMARY_BREED,",
+				"          SECONDARY_BREED_NAME = SECONDARY_BREED,",
+				"          SPECIES_NAME = SPECIES,",
+				"          DI_JOB_ID,",
+				"          DI_LOAD_DT = DI_CREATED_DT",
+				"     )) ~> sinkBreedDim"
 			]
 		}
 	}
