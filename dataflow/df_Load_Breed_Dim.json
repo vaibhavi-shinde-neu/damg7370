@@ -47,7 +47,10 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'table') ~> sourceStg",
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          MAXBREEDSK as decimal(10,0)",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     query: 'SELECT NVL(MAX(BREED_SK),0) as\\nMaxBreedSK FROM DADABI_SCHEMA.BREED_DIM',",
 				"     format: 'query') ~> sourceBreedDim",
@@ -59,7 +62,8 @@
 				"SourceDataWithSK aggregate(groupBy(SPECIES,",
 				"          PRIMARY_BREED,",
 				"          SECONDARY_BREED,",
-				"          {} = ERROR_FUNCTION(''))) ~> aggregateBreedKeys"
+				"          MAXBREEDSK),",
+				"     COUNT_ROW = count(LICENSE_NUMBER)) ~> aggregateBreedKeys"
 			]
 		}
 	}
