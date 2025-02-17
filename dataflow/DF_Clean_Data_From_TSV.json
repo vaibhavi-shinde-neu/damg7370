@@ -14,6 +14,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "SnowflakeSPL",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -64,8 +68,35 @@
 				"     skipDuplicateMapOutputs: false) ~> select1",
 				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     input(",
+				"          LICENSE_ISSUE_DATE as string,",
+				"          LICENSE_NUMBER as string,",
+				"          ANIMAL_NAME as string,",
+				"          SPECIES as string,",
+				"          PRIMARY_BREED as string,",
+				"          SECONDARY_BREED as string,",
+				"          ZIP_CODE as string,",
+				"          DI_JOB_ID as string,",
+				"          DI_LOAD_DT as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          LICENSE_ISSUE_DATE = LIC_ISSUE_DATE,",
+				"          LICENSE_NUMBER = License_Number,",
+				"          ANIMAL_NAME = Animals_Name,",
+				"          SPECIES = Species,",
+				"          PRIMARY_BREED = Primary_Breed,",
+				"          SECONDARY_BREED = Secondary_Breed,",
+				"          ZIP_CODE = ZIP_Code,",
+				"          DI_JOB_ID = Job_ID,",
+				"          DI_LOAD_DT = Load_Dt",
+				"     )) ~> sink1"
 			]
 		}
 	}
