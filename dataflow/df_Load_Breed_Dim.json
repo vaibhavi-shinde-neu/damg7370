@@ -11,10 +11,23 @@
 					},
 					"name": "sourceStg",
 					"description": "Import data from\n"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_Edw_Breed_Dim",
+						"type": "DatasetReference"
+					},
+					"name": "sourceBreedDim",
+					"description": "Import data from \nds_Edw_Breed_Dim"
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "SourceDataWithSK",
+					"description": "Custom (cross) join on 'sourceStg' and 'sourceBreedDim'"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          LICENSE_ISSUE_DATE as string,",
@@ -29,7 +42,16 @@
 				"     ),",
 				"     allowSchemaDrift: false,",
 				"     validateSchema: false,",
-				"     format: 'table') ~> sourceStg"
+				"     format: 'table') ~> sourceStg",
+				"source(allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     query: 'SELECT NVL(MAX(BREED_SK),0) as\\nMaxBreedSK FROM EDW.BREED_DIM',",
+				"     format: 'query') ~> sourceBreedDim",
+				"sourceStg, sourceBreedDim join(1==1,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> SourceDataWithSK"
 			]
 		}
 	}
