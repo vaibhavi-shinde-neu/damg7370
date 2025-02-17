@@ -26,6 +26,10 @@
 				{
 					"name": "SourceDataWithSK",
 					"description": "Custom (cross) join on 'sourceStg' and 'sourceBreedDim'"
+				},
+				{
+					"name": "aggregateBreedKeys",
+					"description": "Aggregating data by 'SPCIES, PRIMARY_BREED, SECONDARY_BREED, MAXBREEDSK' producing columns"
 				}
 			],
 			"scriptLines": [
@@ -51,7 +55,11 @@
 				"     joinType:'cross',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> SourceDataWithSK"
+				"     broadcast: 'auto')~> SourceDataWithSK",
+				"SourceDataWithSK aggregate(groupBy(SPECIES,",
+				"          PRIMARY_BREED,",
+				"          SECONDARY_BREED,",
+				"          {} = ERROR_FUNCTION(''))) ~> aggregateBreedKeys"
 			]
 		}
 	}
