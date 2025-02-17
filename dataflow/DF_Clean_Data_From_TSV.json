@@ -1,0 +1,27 @@
+{
+	"name": "DF_Clean_Data_From_TSV",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText_Dataset",
+						"type": "DatasetReference"
+					},
+					"name": "readTSVfile"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          {License_Issue_Date     License_Number     Animals_Name     Species     Primary_Breed     Secondary_Breed     ZIP_Code} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> readTSVfile"
+			]
+		}
+	}
+}
