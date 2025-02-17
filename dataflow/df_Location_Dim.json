@@ -16,11 +16,10 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_Edw_Location_Dim",
+						"referenceName": "ds_location_dim",
 						"type": "DatasetReference"
 					},
-					"name": "LoadLocationDim",
-					"description": "Export data to ds_EDW_Location_Dim"
+					"name": "sink1"
 				}
 			],
 			"transformations": [
@@ -57,7 +56,7 @@
 				"          CITY as string,",
 				"          STATE as string,",
 				"          STATE_ABBR as string,",
-				"          ZIP_CODE as string,",
+				"          ZIP as string,",
 				"          DI_JOB_ID as string,",
 				"          DI_LOAD_DT as string",
 				"     ),",
@@ -66,18 +65,16 @@
 				"     updateable:false,",
 				"     upsertable:false,",
 				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
 				"     stageInsert: true,",
 				"     mapColumn(",
 				"          LOCATION_SK = SK_ID,",
 				"          CITY = city,",
 				"          STATE = state,",
 				"          STATE_ABBR = state_abbr,",
-				"          ZIP_CODE = zipcode,",
+				"          ZIP = zipcode,",
 				"          DI_JOB_ID,",
 				"          DI_LOAD_DT = DI_CREATED_DT",
-				"     )) ~> LoadLocationDim"
+				"     )) ~> sink1"
 			]
 		}
 	}
