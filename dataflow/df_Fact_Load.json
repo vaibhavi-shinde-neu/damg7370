@@ -1,0 +1,63 @@
+{
+	"name": "df_Fact_Load",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SnowflakeSPL",
+						"type": "DatasetReference"
+					},
+					"name": "SPLStageTable"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_Edw_Location_Dim",
+						"type": "DatasetReference"
+					},
+					"name": "LocationDim"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "join"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          LICENSE_ISSUE_DATE as date,",
+				"          LICENSE_NUMBER as string,",
+				"          ANIMAL_NAME as string,",
+				"          SPECIES as string,",
+				"          PRIMARY_BREED as string,",
+				"          SECONDARY_BREED as string,",
+				"          ZIP_CODE as string,",
+				"          DI_JOB_ID as string,",
+				"          DI_LOAD_DT as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> SPLStageTable",
+				"source(output(",
+				"          LOCATION_SK as string,",
+				"          CITY as string,",
+				"          STATE as string,",
+				"          STATE_ABBR as string,",
+				"          ZIP_CODE as string,",
+				"          DI_JOB_ID as string,",
+				"          DI_LOAD_DT as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table') ~> LocationDim",
+				"SPLStageTable, LocationDim join(SPLStageTable@ZIP_CODE == LocationDim@ZIP_CODE,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join"
+			]
+		}
+	}
+}
