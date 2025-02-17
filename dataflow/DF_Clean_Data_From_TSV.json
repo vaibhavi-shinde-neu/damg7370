@@ -12,7 +12,11 @@
 					"name": "readTSVfile"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
@@ -43,8 +47,8 @@
 				"          Species = upper(Species),",
 				"          License_Number = toInteger(translate(License_Number, 'S', '')),",
 				"          Animals_Name = translate(Animals_Name, '()[]', ''),",
-				"          Load_Dt = currentDate(),",
-				"          column1 = ERROR_FUNCTION('')) ~> derivedColumn1",
+				"          Job_ID = $Job_ID,",
+				"          Load_Dt = currentDate()) ~> derivedColumn1",
 				"derivedColumn1 select(mapColumn(",
 				"          LIC_ISSUE_DATE,",
 				"          License_Number,",
@@ -52,10 +56,16 @@
 				"          Species,",
 				"          Primary_Breed,",
 				"          Secondary_Breed,",
-				"          ZIP_Code",
+				"          ZIP_Code,",
+				"          Job_ID,",
+				"          Load_Dt",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> select1"
+				"     skipDuplicateMapOutputs: false) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
