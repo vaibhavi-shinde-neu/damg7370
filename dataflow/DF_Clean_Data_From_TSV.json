@@ -31,13 +31,12 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> readTSVfile",
-				"readTSVfile derive(LIC_ISSUE_DATE = toDate(License_Issue_Date, 'MMMM dd yyyy'),",
+				"readTSVfile derive(LIC_ISSUE_DATE = toDate({License_Issue_Date}, 'MMMM dd yyyy', 'en-US'),",
 				"          Secondary_Breed = iifNull(Secondary_Breed, 'Unknown'),",
 				"          ZIP_Code = lpad(toString(ZIP_Code), 5, '0'),",
 				"          Species = upper(Species),",
 				"          License_Number = toInteger(translate(License_Number, 'S', '')),",
-				"          Animals_Name = translate(Animals_Name, '()[]', ''),",
-				"          column1 = ERROR_FUNCTION('')) ~> derivedColumn1"
+				"          Animals_Name = translate(Animals_Name, '()[]', '')) ~> derivedColumn1"
 			]
 		}
 	}
