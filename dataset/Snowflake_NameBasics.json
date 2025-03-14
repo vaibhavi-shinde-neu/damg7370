@@ -1,0 +1,16 @@
+{
+	"name": "Snowflake_NameBasics",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake1_mid",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [],
+		"typeProperties": {
+			"schema": "DADABI_SCHEMA",
+			"table": "RAWSTAGE_NAME_BASICS"
+		}
+	}
+}

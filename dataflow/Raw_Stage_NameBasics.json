@@ -1,0 +1,69 @@
+{
+	"name": "Raw_Stage_NameBasics",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "NameBasicstsv",
+						"type": "DatasetReference"
+					},
+					"name": "RawNameBasics"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Snowflake_NameBasics",
+						"type": "DatasetReference"
+					},
+					"name": "RawStageNameBasics"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     Job_Id as string (\"10\")",
+				"}",
+				"source(output(",
+				"          nconst as string,",
+				"          primaryName as string,",
+				"          birthYear as string,",
+				"          deathYear as string,",
+				"          primaryProfession as string,",
+				"          knownForTitles as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> RawNameBasics",
+				"RawNameBasics derive(JOB_ID = $Job_Id,",
+				"          CREATED_DATE = currentTimestamp()) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     mapColumn(",
+				"          NCONST = nconst,",
+				"          PRIMARYNAME = primaryName,",
+				"          BIRTHYEAR = birthYear,",
+				"          DEATHYEAR = deathYear,",
+				"          PRIMARYPROFESSION = primaryProfession,",
+				"          KNOWNFORTITLES = knownForTitles,",
+				"          JOB_ID,",
+				"          CREATED_DATE",
+				"     )) ~> RawStageNameBasics"
+			]
+		}
+	}
+}
